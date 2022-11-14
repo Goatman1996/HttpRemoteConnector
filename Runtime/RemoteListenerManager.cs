@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 
 namespace HttpRemoteConnector
@@ -29,17 +30,26 @@ namespace HttpRemoteConnector
 
         private string GetLocalIPAddress()
         {
-            var ip4List = new List<string>();
-            System.Net.IPAddress[] addressList = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-            foreach (var ip in addressList)
-            {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    ip4List.Add(ip.ToString());
-                }
-            }
+            // var ip4List = new List<string>();
+            // System.Net.IPAddress[] addressList = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+            // foreach (var ip in addressList)
+            // {
+            //     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+            //     {
+            //         ip4List.Add(ip.ToString());
+            //     }
+            // }
 
-            return ip4List[ip4List.Count - 1];
+            // return ip4List[ip4List.Count - 1];
+
+            string localIP;
+            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+            {
+                socket.Connect("8.8.8.8", 65530);
+                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                localIP = endPoint.Address.ToString();
+            }
+            return localIP;
         }
 
         public string myIp { get; private set; }
