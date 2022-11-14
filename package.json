@@ -1,16 +1,12 @@
 {
     "name": "com.gm.httpremoteconnector",
-    "version": "0.9.1",
+    "version": "0.0.1",
     "displayName": "Http Remote Connector",
     "description": "Base on http remote connector",
     "unity": "2020.3",
     "author": {
         "name": "Goatman",
         "email": "goatman914@gmail.com",
-        "url": "https://github.com/Goatman1996/HttpRemoteConnector/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Goatman1996/HttpRemoteConnector.git"
+        "url": "https://gitee.com/goatman/"
     }
 }

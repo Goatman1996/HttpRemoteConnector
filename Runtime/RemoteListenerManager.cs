@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HttpRemoteConnector
 {
-    public class RemoteListenerManager
+    internal class RemoteListenerManager
     {
         private static RemoteListenerManager _Instance;
         public static RemoteListenerManager Instance
@@ -59,7 +59,7 @@ namespace HttpRemoteConnector
                 throw new System.Exception($"[HttpRemoteConnector] {port} is Listening already");
             }
             var url = $"{this.myIp}:{port}/";
-            UnityEngine.Debug.LogError($"Listen URL {url}");
+            UnityEngine.Debug.Log($"[{remoteListener.GetType().FullName}] Listen URL {url}");
             var httpListener = new HttpListener();
             try
             {
