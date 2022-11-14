@@ -1,6 +1,6 @@
 {
     "name": "com.gm.httpremoteconnector",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "displayName": "Http Remote Connector",
     "description": "Base on http remote connector",
     "unity": "2020.3",
