@@ -26,22 +26,25 @@ namespace HttpRemoteConnector
             this.listenerDic = new Dictionary<int, HttpListener>();
             var url = GetLocalIPAddress();
             this.myIp = $"http://{url}";
+
+            var go = new UnityEngine.GameObject();
+            go.name = nameof(ForRemoteListenerOnGameExit);
+            var exitEvt = go.AddComponent<ForRemoteListenerOnGameExit>();
+            exitEvt.OnDestroyEvt += this.OnDestroy;
+            UnityEngine.GameObject.DontDestroyOnLoad(go);
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var kv in this.listenerDic)
+            {
+                var listener = kv.Value;
+                listener.Stop();
+            }
         }
 
         private string GetLocalIPAddress()
         {
-            // var ip4List = new List<string>();
-            // System.Net.IPAddress[] addressList = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-            // foreach (var ip in addressList)
-            // {
-            //     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            //     {
-            //         ip4List.Add(ip.ToString());
-            //     }
-            // }
-
-            // return ip4List[ip4List.Count - 1];
-
             string localIP;
             using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
             {
@@ -91,14 +94,16 @@ namespace HttpRemoteConnector
         {
             while (true)
             {
-                if (UnityEngine.Application.isPlaying == false)
-                {
-                    httpListener.Close();
-                    return;
-                }
+                HttpListenerRequest request = null;
+                HttpListenerContext context = null;
 
-                var context = await httpListener.GetContextAsync();
-                HttpListenerRequest request = context.Request;
+                try
+                {
+                    context = await httpListener.GetContextAsync();
+                    request = context.Request;
+                }
+                catch { return; }
+
 
                 var response = context.Response;
                 response.ContentEncoding = Encoding.UTF8;
